@@ -10,16 +10,31 @@ import (
 	"fyne.io/fyne/v2/widget"
 )
 
+var ramTable fyne.Widget
+
 // Create and show RAM window
-func RamInfo(totalRam int, avalableRam int, usedRam int, usedPercent float64, app fyne.App) {
+func RamInfo(totalRam int, availableRam int, usedRam int, usedPercent float64, app fyne.App) {
 
 	ramWindow := app.NewWindow("RAM Info")
 
+	ramDataTable(totalRam, availableRam, usedRam, usedPercent)
+
+	layout := container.New(layout.NewStackLayout(), ramTable)
+
+	ramWindow.SetContent(layout)
+	ramWindow.Resize(fyne.NewSize(380, 240))
+	ramWindow.CenterOnScreen()
+	ramWindow.Show()
+
+}
+
+func ramDataTable(totalRam int, availableRam int, usedRam int, usedPercent float64) {
+
 	ramData := [][]string{{"Total:", strconv.Itoa(totalRam) + " GB"},
 		{"Used:", strconv.Itoa(usedRam) + " GB, " + fmt.Sprintf("%f", usedPercent) + "%"},
-		{"Available:", strconv.Itoa(avalableRam) + " GB"}}
+		{"Available:", strconv.Itoa(availableRam) + " GB"}}
 
-	ramTable := widget.NewTable(
+	ramTable = widget.NewTable(
 		func() (rows int, cols int) {
 			return len(ramData), len(ramData[0])
 		},
@@ -31,10 +46,4 @@ func RamInfo(totalRam int, avalableRam int, usedRam int, usedPercent float64, ap
 		},
 	)
 
-	layout := container.New(layout.NewStackLayout(), ramTable)
-
-	ramWindow.SetContent(layout)
-	ramWindow.Resize(fyne.NewSize(380, 240))
-	ramWindow.CenterOnScreen()
-	ramWindow.Show()
 }

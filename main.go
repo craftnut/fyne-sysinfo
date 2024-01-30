@@ -1,11 +1,15 @@
 package main
 
+// main.go gets information into variables and creates the main menu window
 import (
 	"fmt"
 	"math"
 
 	"github.com/shirou/gopsutil/v3/cpu"
+	"github.com/shirou/gopsutil/v3/host"
 	"github.com/shirou/gopsutil/v3/mem"
+
+	"github.com/wille/osutil"
 
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
@@ -37,10 +41,18 @@ func main() {
 	cpuCores := cpu[0].Cores
 	cpuSpeed := cpu[0].Mhz
 
-	launchMainWindow(memFreeGb, memAvailableGb, memUsedGb, mem.UsedPercent, cpuVendor, cpuModel, cpuCores, cpuSpeed)
+	osName := osutil.Name
+	osVer := osutil.GetVersion()
+
+	host, _ := host.Info()
+
+	hostname := host.Hostname
+	hostArch := host.KernelArch
+
+	launchMainWindow(memFreeGb, memAvailableGb, memUsedGb, mem.UsedPercent, cpuVendor, cpuModel, cpuCores, cpuSpeed, osName, osVer, hostname, hostArch)
 }
 
-func launchMainWindow(totalMem int, availableMem int, usedMem int, usedMemPercent float64, cpuVendor string, cpuModel string, cpuCores int32, cpuSpeed float64) {
+func launchMainWindow(totalMem int, availableMem int, usedMem int, usedMemPercent float64, cpuVendor string, cpuModel string, cpuCores int32, cpuSpeed float64, osName string, osVer string, hostname string, hostArch string) {
 
 	fmt.Println(totalMem)
 	fmt.Println(availableMem)
@@ -54,7 +66,9 @@ func launchMainWindow(totalMem int, availableMem int, usedMem int, usedMemPercen
 	memButton := widget.NewButton("RAM Info", func() {
 		info.RamInfo(totalMem, availableMem, usedMem, usedMemPercent, app)
 	})
-	osButton := widget.NewButton("OS Info", func() {})
+	osButton := widget.NewButton("OS Info", func() {
+		info.OsInfo(osName, osVer, hostname, hostArch, app)
+	})
 
 	layout := container.New(layout.NewGridWrapLayout(fyne.NewSize(250, 25)), cpuButton, memButton, osButton)
 
