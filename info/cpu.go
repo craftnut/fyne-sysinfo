@@ -2,6 +2,7 @@ package info
 
 import (
 	"fmt"
+	"strconv"
 
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/container"
@@ -10,14 +11,16 @@ import (
 )
 
 // Create and show CPU info window
-func CpuInfo(cpuVendor string, cpuModel string, app fyne.App) {
+func CpuInfo(cpuVendor string, cpuModel string, cpuCores int32, cpuSpeed float64, app fyne.App) {
 
 	fmt.Println(cpuVendor, "\n", cpuModel)
 
 	cpuWindow := app.NewWindow("CPU Info")
 
-	cpuData := [][]string{[]string{"CPU:", cpuModel},
-		[]string{"Vendor:", cpuVendor}}
+	cpuData := [][]string{{"CPU:", cpuModel},
+		{"Cores:", strconv.Itoa(int(cpuCores))},
+		{"Speed:", fmt.Sprintf("%f", cpuSpeed) + " MHz"},
+		{"Vendor:", cpuVendor}}
 
 	cpuTable := widget.NewTable(
 		func() (rows int, cols int) {
@@ -31,9 +34,7 @@ func CpuInfo(cpuVendor string, cpuModel string, app fyne.App) {
 		},
 	)
 
-	backButton := widget.NewButton("Back", func() { cpuWindow.Close() })
-
-	layout := container.New(layout.NewGridLayout(1), cpuTable, backButton)
+	layout := container.New(layout.NewStackLayout(), cpuTable)
 
 	cpuWindow.SetContent(layout)
 	cpuWindow.Resize(fyne.NewSize(380, 240))
