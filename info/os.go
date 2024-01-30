@@ -7,7 +7,7 @@ import (
 	"fyne.io/fyne/v2/widget"
 )
 
-func OsInfo(osName string, osVer string, hostname string, hostArch string, app fyne.App) {
+func OsInfo(osName string, osVer string, hostname string, hostArch string, platform string, app fyne.App) {
 
 	osWindow := app.NewWindow("OS Info")
 
@@ -15,12 +15,14 @@ func OsInfo(osName string, osVer string, hostname string, hostArch string, app f
 	verLabel := widget.NewLabel("Version: " + osVer)
 	hostLabel := widget.NewLabel(hostname)
 	archLabel := widget.NewLabel(hostArch)
+	platLabel := widget.NewLabel(platform)
 
 	layout := container.New(layout.NewGridLayout(1),
 		hostLabel,
 		nameLabel,
 		verLabel,
 		archLabel,
+		platLabel,
 	)
 
 	osWindow.SetContent(layout)

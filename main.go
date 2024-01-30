@@ -21,8 +21,12 @@ import (
 )
 
 func main() {
+	var osVer string
+
 	mem, _ := mem.VirtualMemory()
 	cpu, _ := cpu.Info()
+
+	fmt.Println(cpu)
 
 	memFreeGb := int(
 		math.Round(float64(mem.Total/1.074e+9) + .5),
@@ -41,18 +45,27 @@ func main() {
 	cpuCores := cpu[0].Cores
 	cpuSpeed := cpu[0].Mhz
 
-	osName := osutil.Name
-	osVer := osutil.GetVersion()
-
 	host, _ := host.Info()
 
 	hostname := host.Hostname
 	hostArch := host.KernelArch
+	platform := host.Platform
 
-	launchMainWindow(memFreeGb, memAvailableGb, memUsedGb, mem.UsedPercent, cpuVendor, cpuModel, cpuCores, cpuSpeed, osName, osVer, hostname, hostArch)
+	osName := osutil.Name
+
+	switch osName {
+	case "Linux", "FreeBSD":
+		osVer = host.KernelVersion
+	case "Windows", "macOS":
+		osVer = osutil.GetVersion()
+	default:
+		osVer = "Unknown"
+	}
+
+	launchMainWindow(memFreeGb, memAvailableGb, memUsedGb, mem.UsedPercent, cpuVendor, cpuModel, cpuCores, cpuSpeed, osName, osVer, hostname, hostArch, platform)
 }
 
-func launchMainWindow(totalMem int, availableMem int, usedMem int, usedMemPercent float64, cpuVendor string, cpuModel string, cpuCores int32, cpuSpeed float64, osName string, osVer string, hostname string, hostArch string) {
+func launchMainWindow(totalMem int, availableMem int, usedMem int, usedMemPercent float64, cpuVendor string, cpuModel string, cpuCores int32, cpuSpeed float64, osName string, osVer string, hostname string, hostArch string, platform string) {
 
 	fmt.Println(totalMem)
 	fmt.Println(availableMem)
@@ -67,7 +80,7 @@ func launchMainWindow(totalMem int, availableMem int, usedMem int, usedMemPercen
 		info.RamInfo(totalMem, availableMem, usedMem, usedMemPercent, app)
 	})
 	osButton := widget.NewButton("OS Info", func() {
-		info.OsInfo(osName, osVer, hostname, hostArch, app)
+		info.OsInfo(osName, osVer, hostname, hostArch, platform, app)
 	})
 
 	layout := container.New(layout.NewGridWrapLayout(fyne.NewSize(250, 25)), cpuButton, memButton, osButton)
