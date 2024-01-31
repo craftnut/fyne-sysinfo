@@ -7,7 +7,11 @@ import (
 	"fyne.io/fyne/v2/widget"
 )
 
-func OsInfo(osName string, osVer string, hostname string, hostArch string, platform string, app fyne.App) {
+func OsInfo(
+	osName string, osVer string,
+	hostname string, hostArch string,
+	platform string, app fyne.App,
+) {
 
 	osWindow := app.NewWindow("OS Info")
 

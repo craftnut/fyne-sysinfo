@@ -13,11 +13,18 @@ import (
 var ramTable fyne.Widget
 
 // Create and show RAM window
-func RamInfo(totalRam int, availableRam int, usedRam int, usedPercent float64, app fyne.App) {
+func RamInfo(
+	totalRam int, availableRam int,
+	usedRam int, usedPercent float64,
+	app fyne.App,
+) {
 
 	ramWindow := app.NewWindow("RAM Info")
 
-	ramDataTable(totalRam, availableRam, usedRam, usedPercent)
+	ramDataTable(
+		totalRam, availableRam,
+		usedRam, usedPercent,
+	)
 
 	layout := container.New(layout.NewStackLayout(), ramTable)
 
@@ -28,7 +35,10 @@ func RamInfo(totalRam int, availableRam int, usedRam int, usedPercent float64, a
 
 }
 
-func ramDataTable(totalRam int, availableRam int, usedRam int, usedPercent float64) {
+func ramDataTable(
+	totalRam int, availableRam int,
+	usedRam int, usedPercent float64,
+) {
 
 	ramData := [][]string{{"Total:", strconv.Itoa(totalRam) + " GB"},
 		{"Used:", strconv.Itoa(usedRam) + " GB, " + fmt.Sprintf("%f", usedPercent) + "%"},

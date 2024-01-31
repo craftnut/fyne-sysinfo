@@ -20,25 +20,28 @@ import (
 	info "github.com/craftnut/fyne-sysinfo/info"
 )
 
+const byteDivider = 1074000000 // when divided by this, bytes become gibibytes
+
 func main() {
+
 	var osVer string
 
 	mem, _ := mem.VirtualMemory()
-	cpu, _ := cpu.Info()
-
-	fmt.Println(cpu)
 
 	memFreeGb := int(
-		math.Round(float64(mem.Total/1.074e+9) + .5),
+		math.Round(float64(mem.Total/byteDivider) + .5),
 	)
 
 	memAvailableGb := int(
-		math.Round(float64(mem.Available/1.074e+9) + .5),
+		math.Round(float64(mem.Available/byteDivider) + .5),
 	)
 
 	memUsedGb := int(
-		math.Round(float64(mem.Used/1.074e+9) + .5),
+		math.Round(float64(mem.Used/byteDivider) + .5),
 	)
+
+	cpu, _ := cpu.Info()
+	fmt.Println(cpu)
 
 	cpuVendor := cpu[0].VendorID
 	cpuModel := cpu[0].ModelName
@@ -62,10 +65,19 @@ func main() {
 		osVer = "Unknown"
 	}
 
-	launchMainWindow(memFreeGb, memAvailableGb, memUsedGb, mem.UsedPercent, cpuVendor, cpuModel, cpuCores, cpuSpeed, osName, osVer, hostname, hostArch, platform)
+	launchMainWindow(
+		memFreeGb, memAvailableGb, memUsedGb, mem.UsedPercent,
+		cpuVendor, cpuModel, cpuCores, cpuSpeed,
+		osName, osVer, hostname, hostArch, platform,
+	)
+
 }
 
-func launchMainWindow(totalMem int, availableMem int, usedMem int, usedMemPercent float64, cpuVendor string, cpuModel string, cpuCores int32, cpuSpeed float64, osName string, osVer string, hostname string, hostArch string, platform string) {
+func launchMainWindow(
+	totalMem int, availableMem int, usedMem int, usedMemPercent float64,
+	cpuVendor string, cpuModel string, cpuCores int32, cpuSpeed float64,
+	osName string, osVer string, hostname string, hostArch string, platform string,
+) {
 
 	fmt.Println(totalMem)
 	fmt.Println(availableMem)
@@ -89,4 +101,5 @@ func launchMainWindow(totalMem int, availableMem int, usedMem int, usedMemPercen
 	mainWindow.Resize(fyne.NewSize(250, (25 * 3)))
 	mainWindow.CenterOnScreen()
 	mainWindow.ShowAndRun()
+
 }

@@ -13,11 +13,18 @@ import (
 var cpuTable fyne.Widget
 
 // Create and show CPU info window
-func CpuInfo(cpuVendor string, cpuModel string, cpuCores int32, cpuSpeed float64, app fyne.App) {
+func CpuInfo(
+	cpuVendor string, cpuModel string,
+	cpuCores int32, cpuSpeed float64,
+	app fyne.App,
+) {
 
 	cpuWindow := app.NewWindow("CPU Info")
 
-	cpuDataTable(cpuVendor, cpuModel, cpuCores, cpuSpeed)
+	cpuDataTable(
+		cpuVendor, cpuModel,
+		cpuCores, cpuSpeed,
+	)
 
 	layout := container.New(layout.NewStackLayout(), cpuTable)
 
@@ -28,7 +35,10 @@ func CpuInfo(cpuVendor string, cpuModel string, cpuCores int32, cpuSpeed float64
 
 }
 
-func cpuDataTable(cpuVendor string, cpuModel string, cpuCores int32, cpuSpeed float64) {
+func cpuDataTable(
+	cpuVendor string, cpuModel string,
+	cpuCores int32, cpuSpeed float64,
+) {
 
 	cpuData := [][]string{{"CPU:", cpuModel},
 		{"Cores:", strconv.Itoa(int(cpuCores))},
