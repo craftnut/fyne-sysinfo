@@ -2,7 +2,6 @@ package info
 
 import (
 	"fmt"
-	"strconv"
 
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/container"
@@ -15,7 +14,7 @@ var cpuTable fyne.Widget
 // Create and show CPU info window
 func CpuInfo(
 	cpuVendor string, cpuModel string,
-	cpuCores int32, cpuSpeed float64,
+	cpuCores string, cpuSpeed float64,
 	app fyne.App,
 ) {
 
@@ -37,11 +36,11 @@ func CpuInfo(
 
 func cpuDataTable(
 	cpuVendor string, cpuModel string,
-	cpuCores int32, cpuSpeed float64,
+	cpuThreads string, cpuSpeed float64,
 ) {
 
 	cpuData := [][]string{{"CPU:", cpuModel},
-		{"Cores:", strconv.Itoa(int(cpuCores))},
+		{"Threads:", cpuThreads},
 		{"Speed:", fmt.Sprintf("%f", cpuSpeed) + " MHz"},
 		{"Vendor:", cpuVendor}}
 

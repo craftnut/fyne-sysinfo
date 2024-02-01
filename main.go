@@ -3,7 +3,9 @@ package main
 // main.go gets information into variables and creates the main menu window
 import (
 	"fmt"
+	"log"
 	"math"
+	"os/exec"
 
 	"github.com/shirou/gopsutil/v3/cpu"
 	"github.com/shirou/gopsutil/v3/host"
@@ -25,6 +27,7 @@ const byteDivider = 1074000000 // when divided by this, bytes become gibibytes
 func main() {
 
 	var osVer string
+	var cpuThreads string
 
 	mem, _ := mem.VirtualMemory()
 
@@ -45,7 +48,7 @@ func main() {
 
 	cpuVendor := cpu[0].VendorID
 	cpuModel := cpu[0].ModelName
-	cpuCores := cpu[0].Cores
+
 	cpuSpeed := cpu[0].Mhz
 
 	host, _ := host.Info()
@@ -59,15 +62,23 @@ func main() {
 	switch osName {
 	case "Linux", "FreeBSD":
 		osVer = host.KernelVersion
+		nproc, err := exec.Command("nproc").Output()
+		if err != nil {
+			cpuThreads = "Unknown"
+			log.Fatal(err)
+		}
+		cpuThreads = string(nproc)
 	case "Windows", "macOS":
 		osVer = osutil.GetVersion()
+		cpuThreads = fmt.Sprintf("%d", cpu[0].Cores)
 	default:
 		osVer = "Unknown"
+		cpuThreads = "Unknown"
 	}
 
 	launchMainWindow(
 		memFreeGb, memAvailableGb, memUsedGb, mem.UsedPercent,
-		cpuVendor, cpuModel, cpuCores, cpuSpeed,
+		cpuVendor, cpuModel, cpuThreads, cpuSpeed,
 		osName, osVer, hostname, hostArch, platform,
 	)
 
@@ -75,7 +86,7 @@ func main() {
 
 func launchMainWindow(
 	totalMem int, availableMem int, usedMem int, usedMemPercent float64,
-	cpuVendor string, cpuModel string, cpuCores int32, cpuSpeed float64,
+	cpuVendor string, cpuModel string, cpuThreads string, cpuSpeed float64,
 	osName string, osVer string, hostname string, hostArch string, platform string,
 ) {
 
@@ -86,7 +97,7 @@ func launchMainWindow(
 	mainWindow := app.NewWindow("SysInfo")
 
 	cpuButton := widget.NewButton("CPU Info", func() {
-		info.CpuInfo(cpuVendor, cpuModel, cpuCores, cpuSpeed, app)
+		info.CpuInfo(cpuVendor, cpuModel, cpuThreads, cpuSpeed, app)
 	})
 	memButton := widget.NewButton("RAM Info", func() {
 		info.RamInfo(totalMem, availableMem, usedMem, usedMemPercent, app)
