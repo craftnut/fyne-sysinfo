@@ -1,21 +1,21 @@
-MIT License
+Copyright (c) 2024 craftnut
 
-Copyright (c) 2024 Nico
+This software is provided 'as-is' without any kind of warranty.
+In no event shall the authors or copyright holders be held liable for any
+data loss or damages caused to systems, workflows, or infrastracture caused by using this software.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+You are free to use this software in any way, non-commercially or commercially,
+And you are allowed to redistribute, monetize, and alter this software in anyway freely, as long as you:
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+1. Do not misrepresent the origins of this software; you may not claim to be the original author.
+   If you use this software in a product, you must acknowledge this software and it's authors in the documentation and/or credits.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+2. If you alter the source code, you must clearly state such in the acknowledgement of this software.
+   You must also make the altered source code freely available.
+
+3. Your altered source must be released under the same license.
+
+4. You can use this software in closed-source software, but the part of the software that uses this
+   must be open-source.
+
+5. This notice may not be removed or altered from any redistribution.
