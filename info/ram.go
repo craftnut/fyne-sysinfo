@@ -2,7 +2,6 @@ package info
 
 import (
 	"fmt"
-	"strconv"
 
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/container"
@@ -10,7 +9,7 @@ import (
 	"fyne.io/fyne/v2/widget"
 )
 
-var ramTable fyne.Widget
+var ramList fyne.Widget
 
 // Create and show RAM window
 func RamInfo(
@@ -21,38 +20,48 @@ func RamInfo(
 
 	ramWindow := app.NewWindow("RAM Info")
 
-	ramDataTable(
+	buildRamList(
 		totalRam, availableRam,
 		usedRam, usedPercent,
 	)
 
-	layout := container.New(layout.NewStackLayout(), ramTable)
+	layout := container.New(layout.NewStackLayout(), ramList)
 
 	ramWindow.SetContent(layout)
-	ramWindow.Resize(fyne.NewSize(380, 240))
+	ramWindow.Resize(fyne.NewSize(275, 225))
 	ramWindow.CenterOnScreen()
 	ramWindow.Show()
 
 }
 
-func ramDataTable(
+func buildRamList(
 	totalRam int, availableRam int,
 	usedRam int, usedPercent float64,
 ) {
 
-	ramData := [][]string{{"Total:", strconv.Itoa(totalRam) + " GB"},
-		{"Used:", strconv.Itoa(usedRam) + " GB, " + fmt.Sprintf("%f", usedPercent) + "%"},
-		{"Available:", strconv.Itoa(availableRam) + " GB"}}
+	totalRamStr := fmt.Sprintf("Total: %d GB", totalRam)
+	usedRamStr := fmt.Sprintf("Used: %d GB, %f%c", usedRam, usedPercent, '%')
+	availableRamStr := fmt.Sprintf("Available: %d GB", availableRam)
 
-	ramTable = widget.NewTable(
-		func() (rows int, cols int) {
-			return len(ramData), len(ramData[0])
+	ramListItems := []string{
+		totalRamStr,
+		usedRamStr,
+		availableRamStr,
+	}
+
+	ramList = widget.NewList(
+		func() int {
+			return len(ramListItems)
 		},
+
 		func() fyne.CanvasObject {
-			return widget.NewLabel("ram table")
+			return widget.NewLabel("")
 		},
-		func(i widget.TableCellID, o fyne.CanvasObject) {
-			o.(*widget.Label).SetText(ramData[i.Row][i.Col])
+
+		func(index int, obj fyne.CanvasObject) {
+			if label, ok := obj.(*widget.Label); ok {
+				label.SetText(ramListItems[index])
+			}
 		},
 	)
 

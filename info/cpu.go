@@ -9,7 +9,7 @@ import (
 	"fyne.io/fyne/v2/widget"
 )
 
-var cpuTable fyne.Widget
+var cpuList fyne.Widget
 
 // Create and show CPU info window
 func CpuInfo(
@@ -20,40 +20,50 @@ func CpuInfo(
 
 	cpuWindow := app.NewWindow("CPU Info")
 
-	cpuDataTable(
+	buildCpuList(
 		cpuVendor, cpuModel,
 		cpuCores, cpuSpeed,
 	)
 
-	layout := container.New(layout.NewStackLayout(), cpuTable)
+	layout := container.New(layout.NewStackLayout(), cpuList)
 
 	cpuWindow.SetContent(layout)
-	cpuWindow.Resize(fyne.NewSize(380, 240))
+	cpuWindow.Resize(fyne.NewSize(275, 225))
 	cpuWindow.CenterOnScreen()
 	cpuWindow.Show()
 
 }
 
-func cpuDataTable(
+func buildCpuList(
 	cpuVendor string, cpuModel string,
 	cpuThreads string, cpuSpeed float64,
 ) {
 
-	cpuData := [][]string{{"CPU:", cpuModel},
-		{"Threads:", cpuThreads},
-		{"Speed:", fmt.Sprintf("%f", cpuSpeed) + " MHz"},
-		{"Vendor:", cpuVendor}}
+	cpuModel = fmt.Sprintf("CPU: %s", cpuModel)
+	cpuThreads = fmt.Sprintf("Threads: %s", cpuThreads)
+	cpuSpeedStr := fmt.Sprintf("Speed: %f MHz", cpuSpeed)
+	cpuVendor = fmt.Sprintf("Vendor: %s", cpuVendor)
 
-	cpuTable = widget.NewTable(
-		func() (rows int, cols int) {
-			return len(cpuData), len(cpuData[0])
+	cpuListItems := []string{
+		cpuModel,
+		cpuThreads,
+		cpuSpeedStr,
+		cpuVendor,
+	}
+
+	cpuList = widget.NewList(
+		func() int {
+			return len(cpuListItems)
 		},
+
 		func() fyne.CanvasObject {
-			return widget.NewLabel("cpu table")
+			return widget.NewLabel("")
 		},
-		func(i widget.TableCellID, o fyne.CanvasObject) {
-			o.(*widget.Label).SetText(cpuData[i.Row][i.Col])
+
+		func(index int, obj fyne.CanvasObject) {
+			if label, ok := obj.(*widget.Label); ok {
+				label.SetText(cpuListItems[index])
+			}
 		},
 	)
-
 }
